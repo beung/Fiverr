@@ -1,0 +1,47 @@
+#!/bin/bash
+# File Name: test.sh
+
+if [ $# -eq 0 ]; then
+        echo "Please provide parameter along with file name"
+        exit 1
+fi
+
+rm -rf $filename $filename_log
+filename=<Directory>/output.log
+filename_log=<Directory>/output_data.log
+file=`basename $1`
+
+echo "Starting the process ..." >& $filename
+echo "Cleaning old files ..." >& $filename
+
+rm -rf $tmp_id
+
+tmp_id=<Directory>/tmp_id.txt
+echo "Reading file ..." >& $filename
+while IFS='|' read -r val1 val2
+        do
+                if [ ! -z "$val2" ] && [ ! -z "$val1" ]
+                        then
+echo "Id: " $val1
+echo "Group: " $val2
+                                recordTmp=$(sqlplus -s <Username>/<Password>@<host>:<port>/<service><<<"SELECT ID as '',GRP as '' FROM USERGROUPS WHERE ID = '${val1}' and grp = '${val2}'") 2>/dev/null
+echo "Record from table1: " $recordTmp
+                                sqlplus -s <Username>/<Password>@<host>:<port>/<service><<<"DELETE FROM USERGROUPS WHERE ID = '${val1}' and grp = '${val2}'" 2>/dev/null
+                                echo "Clearing table: USERGROUPS" >& $filename
+                                echo "Deleted id, group from USERGROUPS: " $recordTmp >& $filename
+                                #recordTmp1=`echo "$recordTmp" | sed 's/\|/ /'|awk '{print $1}'`
+
+                                recordTmp2=$(sqlplus -s <Username>/<Password>@<host>:<port>/<service><<<"SELECT DISTINCT ID as '' FROM GENERALAUTHORIZATIONS WHERE ID='${val1}' AND ID NOT IN (SELECT DISTINCT ID FROM USERGROUPS)") 2>/dev/null
+echo "Record from table2: " $recordTmp2
+                                if [ ! -z "recordTmp2" ]
+                                        then
+echo "I am inside now"
+                                                echo "Deleting ID from GENERALAUTHORIZATIONS: "$recordTmp2 >& $filename
+                                                echo "Clearing table: GENERALAUTHORIZATIONS based on record in USERGROUPS table"        >& $filename
+                                                sqlplus -s <Username>/<Password>@<host>:<port>/<service><<<"DELETE FROM GENERALAUTHORIZATIONS WHERE ID='${val1}' AND ID NOT IN (SELECT DISTINCT ID FROM USERGROUPS)" 2>/dev/null
+                                fi
+                fi
+
+done < "$file"
+
+echo "!!!Process completed SUCCESSFULLY!!!"  >& $filename
