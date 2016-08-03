@@ -1,0 +1,146 @@
+function Show-Menu
+{
+     param (
+           [string]$Title = 'My Menu'
+     )
+     cls
+     Write-Host "================ $Title ================"
+     
+     Write-Host "O: Press 'O' for this option."
+     Write-Host "T: Press 'T' for this option."
+     Write-Host "A: Press 'A' for this option."
+     Write-Host "P: Press 'P' for this option."
+     Write-Host "Q: Press 'Q' to quit."
+}
+
+function Option-P
+{
+     $Version = Read-Host -Prompt "Please provide Version Number "
+     Write-Host "You entered : '$Version'"
+     
+     Write-Host "Zipping files for mnmd-r78"
+     $FolderName = (Get-Date).tostring("dd-MM-yyyy") + "_test_mnmd-r78"
+     New-Item -Force -ItemType directory -Path \\mnmd-r78\d$\Allegro\ -Name $FolderName
+
+     Write-Host "Creating Directory \\mnmd-r78\d$\Allegro\test\"
+     Write-Host "Compressing directory and Copying to directory \\mnmd-r78\d$\Allegro\test\ ..."
+     
+     $s1 = "\\mnmd-r78\d$\Allegro\test\"
+     $d1 = "\\mnmd-r78\d$\Allegro\$FolderName\test.zip"
+     Add-Type -assembly "system.io.compression.filesystem"
+     [io.compression.zipfile]::CreateFromDirectory($s1, $d1)
+
+     $s2 = "\\mnmd-r78\d$\Allegro\werk\"
+     $d2 = "\\mnmd-r78\d$\Allegro\$FolderName\werk.zip"
+     Add-Type -assembly "system.io.compression.filesystem"
+     [io.compression.zipfile]::CreateFromDirectory($s2, $d2)
+
+     Write-Host "Compressing directory \\mnmd-r78\d$\Allegro\$FolderName\"
+
+     $s3 = "\\mnmd-r78\d$\Allegro\$FolderName"
+     $d3 = "\\mnmd-r78\d$\Allegro\$FolderName.zip"
+     Add-Type -assembly "system.io.compression.filesystem"
+     [io.compression.zipfile]::CreateFromDirectory($s3, $d3)
+
+     Start-Sleep -s 2
+
+     Remove-Item \\mnmd-r78\d$\Allegro\$FolderName -Recurse
+
+     Write-Host "Zipping files for mnmd-r79"
+     $FolderName1 = (Get-Date).tostring("dd-MM-yyyy") + "_test_mnmd-r79"
+     New-Item -Force -ItemType directory -Path \\mnmd-r79\d$\Allegro -Name $FolderName1
+
+     Write-Host "Creating Directory \\mnmd-r79\d$\Allegro\$FolderName1\"
+     Write-Host "Compressing directory and Copying to directory \\mnmd-r79\d$\Allegro\$FolderName1\ ..."
+
+     $s4 = "\\mnmd-r79\d$\Allegro\test\"
+     $d4 = "\\mnmd-r79\d$\Allegro\$FolderName1\test.zip"
+     Add-Type -assembly "system.io.compression.filesystem"
+     [io.compression.zipfile]::CreateFromDirectory($s4, $d4)
+
+     $s5 = "\\mnmd-r79\d$\Allegro\werk\"
+     $d5 = "\\mnmd-r79\d$\Allegro\$FolderName1\werk.zip"
+     Add-Type -assembly "system.io.compression.filesystem"
+     [io.compression.zipfile]::CreateFromDirectory($s5, $d5)
+
+     Write-Host "Compressing directory \\mnmd-r79\d$\Allegro\$FolderName1\"
+
+     $s6 = "\\mnmd-r79\d$\Allegro\$FolderName1"
+     $d6 = "\\mnmd-r79\d$\Allegro\$FolderName1.zip"
+     Add-Type -assembly "system.io.compression.filesystem"
+     [io.compression.zipfile]::CreateFromDirectory($s6, $d6)
+     
+     Start-Sleep -s 2
+
+     Remove-Item \\mnmd-r79\d$\Allegro\$FolderName1 -Recurse
+
+     Write-Host "Zipping files for mnmd-swappdwi0018"
+     $FolderName2 = (Get-Date).tostring("dd-MM-yyyy") + "_test_mnmd-swappdwi0018"
+     New-Item -Force -ItemType directory -Path \\swappdwi0018\d$\Allegro\test\ -Name $FolderName2
+
+     Write-Host "Creating Directory \\swappdwi0018\d$\Allegro\test\$FolderName2\"
+     Write-Host "Compressing directory and Copying to directory \\swappdwi0018\d$\Allegro\test\$FolderName2\ ..."
+
+     $s7 = "\\swappdwi0018\d$\Allegro\test"
+     $d7 = "\\swappdwi0018\d$\Allegro\test\$FolderName2\test.zip"
+     Add-Type -assembly "system.io.compression.filesystem"
+     [io.compression.zipfile]::CreateFromDirectory($s7, $d7)
+
+     $s8 = "\\swappdwi0018\d$\Allegro\werk"
+     $d8 = "\\swappdwi0018\d$\Allegro\test$FolderName2\werk.zip"
+     Add-Type -assembly "system.io.compression.filesystem"
+     [io.compression.zipfile]::CreateFromDirectory($s8, $d8)
+
+     Start-Sleep -s 2
+
+     Write-Host "Compressing directory \\swappdwi0018\d$\Allegro\$FolderName2\"
+
+     $s9 = "\\swappdwi0018\d$\Allegro\$FolderName2"
+     $d9 = "\\swappdwi0018\d$\Allegro\$FolderName2.zip"
+     Add-Type -assembly "system.io.compression.filesystem"
+     [io.compression.zipfile]::CreateFromDirectory($s9, $d9)
+
+     Remove-Item \\swappdwi0018\d$\Allegro\$FolderName2 -Recurse
+
+     $Date = ((Get-Date).AddMonths(6)).tostring("dd-MM-yyyy")
+     $Final = "Tijdelijke map [Verwijderen na $Date] Allegro test omgeving [$Version]"
+     $name = "3. Applicatie data [archief]"
+     $name -replace ' ', '` '
+     New-Item -Force \\mnmd-r45\f$\APPL_ARCHIEF\Allegro\$name\$Final -type directory
+
+     Write-Host "Moving all zip files to target folder"
+     Move-Item -Force \\mnmd-r78\d$\Allegro\$FolderName.zip \\mnmd-r45\f$\APPL_ARCHIEF\Allegro\$name\$Final
+     Move-Item -Force \\mnmd-r79\d$\Allegro\$FolderName1.zip \\mnmd-r45\f$\APPL_ARCHIEF\Allegro\$name\$Final
+     Move-Item -Force \\swappdwi0018\d$\Allegro\$FolderName2.zip \\mnmd-r45\f$\APPL_ARCHIEF\Allegro\$name\$Final
+     Start-Sleep -s 2
+     cls
+     Write-Host "Process completed successfully ..."
+     Write-Host "Files zipped and copied to directory: \\mnmd-r45\f$\APPL_ARCHIEF\Allegro\3. Applicatie data [archief]\$Final" 
+}
+
+do
+{
+     Show-Menu
+     $input = Read-Host "Please make a selection"
+     switch ($input)
+     {
+           'O' {
+                cls
+                'You chose option O, this option is yet to come'
+           } 'T' {
+                cls
+                'You chose option T, this option is yet to come'
+           } 'A' {
+                cls
+                'You chose option A, this option is yet to come'
+           } 'P' {
+                cls
+                'You chose option P'
+                Option-P
+           } 'q' {
+                return
+           }
+     }
+     pause
+}
+until ($input -eq 'q')
